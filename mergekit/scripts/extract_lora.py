@@ -1,5 +1,3 @@
-# d:\BLNKBLK Labs\Code Lab\Pixie\MergeKit\mergekit-main\mergekit\scripts\extract_lora.py
-
 import json
 import logging
 import os
