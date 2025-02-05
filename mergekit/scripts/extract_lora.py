@@ -1,21 +1,19 @@
-import json
-import logging
 import os
-from typing import Any, Dict, List, Optional, Tuple
-
-import bitsandbytes as bnb
+import json
 import click
 import torch
-from peft.tuners.lora import QuantLinear
-from safetensors.torch import save_file
+import logging
 from tqdm import tqdm
+import bitsandbytes as bnb
+from safetensors.torch import save_file
+from peft.tuners.lora import QuantLinear
+from mergekit.io import LazyTensorLoader
+from mergekit.common import ModelReference
+from mergekit.card import generate_card_lora
 from transformers import AutoModelForCausalLM
 from transformers.pytorch_utils import Conv1D
-
+from typing import Any, Dict, List, Optional, Tuple
 from mergekit.architecture import WeightInfo, get_architecture_info
-from mergekit.card import generate_card_lora
-from mergekit.common import ModelReference
-from mergekit.io import LazyTensorLoader
 
 def low_rank_decomposition(
     weight: torch.Tensor, max_rank: int
@@ -412,7 +410,7 @@ def reconstruct_invocation(args: Dict[str, Any]) -> str:
     if args.get("device"):
         invocation += f" --device={args['device']}"
     if args.get("verbose"):
-    invocation += " --verbose"
+        invocation += " --verbose"
     if args.get("modules_to_save"):
         for module in args["modules_to_save"]:
             invocation += f" --save-module={module}"
