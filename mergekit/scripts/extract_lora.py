@@ -1,3 +1,5 @@
+# d:\BLNKBLK Labs\Code Lab\Pixie\MergeKit\mergekit-main\mergekit\scripts\extract_lora.py
+
 import json
 import logging
 import os
@@ -412,7 +414,7 @@ def reconstruct_invocation(args: Dict[str, Any]) -> str:
     if args.get("device"):
         invocation += f" --device={args['device']}"
     if args.get("verbose"):
-        invocation += " --verbose"
+    invocation += " --verbose"
     if args.get("modules_to_save"):
         for module in args["modules_to_save"]:
             invocation += f" --save-module={module}"
