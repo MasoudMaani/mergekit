@@ -400,7 +400,7 @@ def reconstruct_invocation(args: Dict[str, Any]) -> str:
 
     invocation = f"mergekit-extract-lora {args['finetuned_model']} {args['base_model']} {out_path}"
     if args.get("no_lazy_unpickle"):
-        invocation += " --no-lazy-unpickle
+        invocation += " --no-lazy-unpickle"
     if args.get("skip_undecomposable"):
         invocation += " --skip-undecomposable"
     if args.get("max_rank"):
