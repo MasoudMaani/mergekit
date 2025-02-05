@@ -1,18 +1,3 @@
-# Copyright (C) 2025 Arcee AI
-#
-# This software is free software: you can redistribute it and/or
-# modify it under the terms of the GNU Lesser General Public License as
-# published by the Free Software Foundation, either version 3 of the
-# License, or (at your option) any later version.
-#
-# This software is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with this program. If not, see http://www.gnu.org/licenses/.
-
 import json
 import logging
 import os
@@ -31,7 +16,6 @@ from mergekit.architecture import WeightInfo, get_architecture_info
 from mergekit.card import generate_card_lora
 from mergekit.common import ModelReference
 from mergekit.io import LazyTensorLoader
-
 
 def low_rank_decomposition(
     weight: torch.Tensor, max_rank: int
@@ -63,7 +47,6 @@ def low_rank_decomposition(
 
     return L.to(dtype), R.to(dtype)
 
-
 def decompose_delta_weight(
     base_weight: torch.Tensor,
     finetuned_weight: torch.Tensor,
@@ -94,7 +77,6 @@ def decompose_delta_weight(
     L, R = low_rank_decomposition(delta_weight, max_rank)
 
     return L, R
-
 
 def get_model_details(
     model_id: str,
@@ -160,7 +142,6 @@ def get_model_details(
                 logging.info(f"Skipping undecomposable module '{name}'.")
 
     return module_details, vocab_size
-
 
 def validate_and_combine_details(
     base_model_id: str,
@@ -229,7 +210,6 @@ def validate_and_combine_details(
 
     return module_details, base_vocab_size, finetuned_vocab_size
 
-
 def build_wi_map(base_model_ref: ModelReference, trust_remote_code: bool = False):
     weight_info_map = {}
     base_cfg = base_model_ref.config(trust_remote_code=trust_remote_code)
@@ -243,7 +223,6 @@ def build_wi_map(base_model_ref: ModelReference, trust_remote_code: bool = False
     for weight_info in arch_info.all_weights(base_cfg):
         weight_info_map[weight_info.name] = weight_info
     return weight_info_map
-
 
 def load_weights(
     wi_map: Dict[str, WeightInfo],
@@ -286,7 +265,6 @@ def load_weights(
             return None, None
         raise RuntimeError(f"Missing finetuned weight for {module_name}")
     return base_weight, finetuned_weight
-
 
 def extract_lora(
     module_details: List[Tuple[str, str]],
@@ -407,7 +385,6 @@ def extract_lora(
 
     return lora_weights, ranks
 
-
 def reconstruct_invocation(args: Dict[str, Any]) -> str:
     """
     Reconstruct the command-line invocation string based on the given arguments.
@@ -423,7 +400,7 @@ def reconstruct_invocation(args: Dict[str, Any]) -> str:
 
     invocation = f"mergekit-extract-lora {args['finetuned_model']} {args['base_model']} {out_path}"
     if args.get("no_lazy_unpickle"):
-        invocation += " --no-lazy-unpickle"
+        invocation += " --no-lazy-unpickle
     if args.get("skip_undecomposable"):
         invocation += " --skip-undecomposable"
     if args.get("max_rank"):
@@ -441,7 +418,6 @@ def reconstruct_invocation(args: Dict[str, Any]) -> str:
             invocation += f" --save-module={module}"
 
     return invocation
-
 
 def create_peft_config(
     base_model_name_or_path: str,
@@ -488,7 +464,6 @@ def create_peft_config(
         "task_type": "CAUSAL_LM",
         "use_rslora": False,
     }
-
 
 def save_model_and_config(
     lora_weights: Dict[str, torch.Tensor],
@@ -559,7 +534,6 @@ def save_model_and_config(
         fp.write(card_md)
 
     logging.info(f"PEFT LoRA adapters saved to {out_path}")
-
 
 @click.command("mergekit-extract-lora")
 @click.argument("finetuned_model", type=str)
@@ -698,7 +672,6 @@ def main(
         module_details,
         invocation_args,
     )
-
 
 if __name__ == "__main__":
     main()
